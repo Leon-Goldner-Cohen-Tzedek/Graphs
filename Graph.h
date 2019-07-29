@@ -1,4 +1,5 @@
 #include <iostream>
+#include <list>
 using namespace std;
 
 #ifndef GRAPH_H
@@ -10,17 +11,18 @@ private:
 
   int size;
 
-  bool** matrix;
+  list<int>* adjency_table;
 
   void DFSUtil(int v, bool* visited)
   {
     visited[v] = true;
     cout << v << ", ";
-    for (int i = 0; i < this->size - 1; i++)
+    list<int>::iterator i;
+    for (i = this->adjency_table[v].begin(); i != this->adjency_table[v].end(); ++i)
     {
-      if (!visited[i])
+      if (!visited[*i])
       {
-        DFSUtil(i, visited);
+        DFSUtil(*i, visited);
       }
     }
   }
@@ -37,47 +39,56 @@ public:
     }
 
     DFSUtil(v, visited);
+  }
 
+  void BreadthSearch(int v)
+  {
+    bool* visited = new bool[this->size];
+    for (int i = 0; i < this->size; i++)
+    {
+      visited[i] = false;
+    }
+
+    visited[v] = true;
+    list<int> queue;
+    queue.push_back(v);
+
+    list<int>::iterator i;
+    while (!queue.empty())
+    {
+      v = queue.front();
+      cout << v << ", ";
+
+      for (i = adjency_table->begin(); i != adjency_table->end(); i++)
+      {
+        if (visited[*i])
+        {
+          queue.push_back(*i);
+        }
+      }
+    }
   }
 
   bool IsEdge(int v, int u)
   {
-    return this->matrix[v][u];
+    return this->adjency_table;
   }
 
-  void TurnOn(int u, int v)
+  void AddEdge(int v, int u)
   {
-    this->matrix[u][v] = true;
-    this->matrix[v][u] = true;
-  }
-
-  void TurnOff(int u, int v)
-  {
-    this->matrix[u][v] = false;
-    this->matrix[v][u] = false;
+    this->adjency_table[v].push_back(u);
   }
 
   Graph()
   {
-    size = 0;
-    matrix = nullptr;
+    this->size = 0;
+    this->adjency_table = nullptr;
   }
 
   Graph(int size)
   {
     this->size = size;
-
-    this->matrix = new bool*[this->size];
-
-    for (int i = 0; i < this->size; i++)
-    {
-      this->matrix[i] = new bool[this->size];
-
-      for(int j = 0; j < this->size; j++)
-      {
-        this->matrix[i][j] = false;
-      }
-    }
+    this->adjency_table = new list<int>[this->size];
   }
 };
 
