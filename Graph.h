@@ -58,12 +58,14 @@ public:
     {
       v = queue.front();
       cout << v << ", ";
+      queue.pop_front();
 
-      for (i = adjency_table->begin(); i != adjency_table->end(); i++)
+      for (i = adjency_table[v].begin(); i != adjency_table[v].end(); i++)
       {
-        if (visited[*i])
+        if (!visited[*i])
         {
           queue.push_back(*i);
+          visited[*i] = true;
         }
       }
     }

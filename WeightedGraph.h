@@ -11,6 +11,7 @@ public:
 
   bool IsEdge(int v, int u) // make sure it is not being passed anything less then one DO BOUNDS CHECKING
   {
+    if (//BOUND CHECK)
     return this->adjency_table[v - 1][u - 1] > 0;
   }
 
